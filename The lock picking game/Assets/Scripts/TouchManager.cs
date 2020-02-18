@@ -4,26 +4,61 @@ using UnityEngine;
 
 public class TouchManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    GameObject gObj = null;
+    Plane objPlane;
+    Vector3 mouseObject;
+    private void Start()
     {
         
     }
+    
+    Ray GenerateRay()
+    {
+        Vector3 mousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane);
+        Vector3 mousePosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane);
 
-    // Update is called once per frame
+        Vector3 mousePosFAR = Camera.main.ScreenToWorldPoint(mousePosFar);
+        Vector3 mousePosNEAR = Camera.main.ScreenToWorldPoint(mousePosNear);
+        Debug.DrawRay(mousePosNEAR, mousePosFAR - mousePosNEAR, Color.green);
+        Ray mouseRay = new Ray(mousePosNEAR, mousePosFAR - mousePosNEAR);
+        return mouseRay;
+    }
+
+    
     void Update()
     {
-        if(Input.GetMouseButton(0))
+        
+        if (Input.GetMouseButtonDown(0))
         {
-            Vector3 MousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane);
-            Vector3 MousePosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane);
+            Ray mouseRay1 = GenerateRay();
+            RaycastHit hit;
+            
+            if (Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit) && hit.collider.gameObject.name == "Pick")
+            {
+                gObj = hit.transform.gameObject;
+                objPlane = new Plane(Camera.main.transform.forward * -1, gObj.transform.position);
 
-            //convert the position we get from these planes from screen space  into world space
-            //It established a relationship between screen and the world space
-            Vector3 MousePosFAR = Camera.main.ScreenToWorldPoint(MousePosFar);
-            Vector3 MousePosNEAR = Camera.main.ScreenToWorldPoint(MousePosNear);
-            Debug.DrawRay(MousePosNEAR, MousePosFAR - MousePosNEAR, Color.green);
-
+                //calculated mouse offsets
+                Ray mouseRay2 = Camera.main.ScreenPointToRay(Input.mousePosition);
+                float rayDistance;
+                objPlane.Raycast(mouseRay2, out rayDistance);
+                mouseObject = gObj.transform.position - mouseRay2.GetPoint(rayDistance);
+            }
         }
+        else if (Input.GetMouseButton(0) && gObj)
+        {
+            Ray mouseRay2 = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float rayDistance;
+            if(objPlane.Raycast(mouseRay2, out rayDistance))
+            {
+                gObj.transform.position = mouseRay2.GetPoint(rayDistance) + mouseObject;
+            }
+        }
+        else if (Input.GetMouseButtonUp(0) && gObj)
+        {
+            gObj = null;
+        }
+        
     }
 }
