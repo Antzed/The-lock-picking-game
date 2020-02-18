@@ -34,7 +34,7 @@ public class TouchManager : MonoBehaviour
             Ray mouseRay1 = GenerateRay();
             RaycastHit hit;
             
-            if (Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit) && hit.collider.gameObject.name == "Pick")
+            if (Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit) && hit.collider.gameObject.name == "Sphere")
             {
                 gObj = hit.transform.gameObject;
                 objPlane = new Plane(Camera.main.transform.forward * -1, gObj.transform.position);
