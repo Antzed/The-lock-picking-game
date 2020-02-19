@@ -58,6 +58,19 @@ public class TouchManager : MonoBehaviour
         else if (Input.GetMouseButtonUp(0) && gObj)
         {
             gObj = null;
+
+
+            Ray mouseRay1 = GenerateRay();
+            RaycastHit hit;
+
+            if(Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit) && hit.collider.gameObject.name == "WantedAngle")
+            {
+                Debug.LogError("Unlock");
+            }
+            else
+            {
+                Debug.LogError("Not unlock");
+            }
         }
         
     }
