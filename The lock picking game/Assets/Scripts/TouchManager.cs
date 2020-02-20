@@ -8,9 +8,12 @@ public class TouchManager : MonoBehaviour
     GameObject gObj = null;
     Plane objPlane;
     Vector3 mouseObject;
+
+    private ScreenShake screenShake;
     private void Start()
     {
-        
+        screenShake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
+
     }
     
     Ray GenerateRay()
@@ -69,6 +72,7 @@ public class TouchManager : MonoBehaviour
             }
             else
             {
+                screenShake.CamShake();
                 Debug.LogError("Not unlock");
             }
         }
