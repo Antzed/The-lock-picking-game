@@ -67,13 +67,14 @@ public class TouchManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Not unlock");
+                
                 float distanceToWantedAngle = calculateDistanceToWantedAngle(hit);
                 int screenShakeNumber = getScreenShakeNumber(distanceToWantedAngle);
                 //determine the magnitue of screen shake and carry the shake out
                 if (!screenShakeNumber.Equals(0))
                 {
                     screenShake.CamShake(screenShakeNumber);
+                    Debug.LogError("Not unlock");
                 }
                 else
                 {
