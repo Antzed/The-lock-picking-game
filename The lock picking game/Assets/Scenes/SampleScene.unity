@@ -1062,6 +1062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4ddb01affb63654f8d85705014c640f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenShake: {fileID: 0}
 --- !u!4 &1319739520
 Transform:
   m_ObjectHideFlags: 0
