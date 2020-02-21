@@ -14,19 +14,22 @@ public class TouchManager : MonoBehaviour
     {
         screenShake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
 
+        
     }
-    
-    
+
+
 
     
     void Update()
     {
-        RaycastHit hit;
-        Ray mouseRay1 = GenerateRay();
-        bool isHit = Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit);
+        //log the hit point coordinates in console
+        
 
         if (Input.GetMouseButtonDown(0))
-        {   
+        {
+            RaycastHit hit;
+            Ray mouseRay1 = GenerateRay();
+            bool isHit = Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit);
             if (isHit && hit.collider.gameObject.name == "Sphere")
             {
                 gObj = hit.transform.gameObject;
@@ -48,27 +51,16 @@ public class TouchManager : MonoBehaviour
                 gObj.transform.position = mouseRay2.GetPoint(rayDistance) + mouseObject;
             }
 
-            int screenShakeNumber = getScreenShakeNumber(hit);
-            //determine the magnitue of screen shake and carry the shake out
-            if (!screenShakeNumber.Equals(0))
-            {
-                screenShake.CamShake(screenShakeNumber);
-
-            }
-            else
-            {
-                Debug.LogError("Odd distance appear");
-            }
+            
         }
         else if (Input.GetMouseButtonUp(0) && gObj)
         {
-            gObj = null;
-
-            
-            
-            //log the hit point coordinates in console
+            RaycastHit hit;
+            Ray mouseRay1 = GenerateRay();
+            bool isHit = Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit);
             Debug.LogError("Hit point at x:" + hit.point.x + ", y:" + hit.point.y + ", z:" + hit.point.z);
 
+            gObj = null;
             if (isHit && hit.collider.gameObject.name == "WantedAngle")
             {
                 Debug.LogError("Unlock");
@@ -76,7 +68,17 @@ public class TouchManager : MonoBehaviour
             else
             {
                 Debug.LogError("Not unlock");
-                
+                float distanceToWantedAngle = calculateDistanceToWantedAngle(hit);
+                int screenShakeNumber = getScreenShakeNumber(distanceToWantedAngle);
+                //determine the magnitue of screen shake and carry the shake out
+                if (!screenShakeNumber.Equals(0))
+                {
+                    screenShake.CamShake(screenShakeNumber);
+                }
+                else
+                {
+                    Debug.LogError("Odd distance appear");
+                }
             }
 
            
@@ -96,7 +98,7 @@ public class TouchManager : MonoBehaviour
         return mouseRay;
     }
 
-    private int getScreenShakeNumber(RaycastHit hit)
+    private float calculateDistanceToWantedAngle(RaycastHit hit)
     {
         //calculation:
         //find the hitPoint x and y position
@@ -113,7 +115,14 @@ public class TouchManager : MonoBehaviour
         float distanceToWantedAngle = Mathf.Sqrt(Mathf.Pow(XDistanceToWantedAngle, 2) + Mathf.Pow(YDistanceToWantedAngle, 2));
         Debug.LogError("Distance to wantedAngle = " + distanceToWantedAngle);
 
-        //Determine the number
+        return distanceToWantedAngle;
+        
+
+    }
+
+    private int getScreenShakeNumber(float distanceToWantedAngle)
+    {
+        //Determine the screenshake number number
         if (distanceToWantedAngle > 1.3)
         {
             return 3;
@@ -130,6 +139,5 @@ public class TouchManager : MonoBehaviour
         {
             return 0;
         }
-
     }
 }
