@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,17 +60,23 @@ public class TouchManager : MonoBehaviour
             Ray mouseRay1 = GenerateRay();
             bool isHit = Physics.Raycast(mouseRay1.origin, mouseRay1.direction, out hit);
             Debug.LogError("Hit point at x:" + hit.point.x + ", y:" + hit.point.y + ", z:" + hit.point.z);
+            float distanceToWantedAngle = calculateDistanceToWantedAngle(hit);
+            int screenShakeNumber = getScreenShakeNumber(distanceToWantedAngle);
 
             gObj = null;
             if (isHit && hit.collider.gameObject.name == "WantedAngle")
             {
                 Debug.LogError("Unlock");
+                GameObject winScreen = GameObject.FindGameObjectWithTag("WinScreen");
+                winScreen.GetComponent<MeshRenderer>().enabled = true;
+                StartCoroutine(waitOneSecond(winScreen));
+                
+
             }
             else
             {
+                Debug.LogError("Wanted Angle not find");
                 
-                float distanceToWantedAngle = calculateDistanceToWantedAngle(hit);
-                int screenShakeNumber = getScreenShakeNumber(distanceToWantedAngle);
                 //determine the magnitue of screen shake and carry the shake out
                 if (!screenShakeNumber.Equals(0))
                 {
@@ -86,6 +93,8 @@ public class TouchManager : MonoBehaviour
         }
         
     }
+
+   
 
     Ray GenerateRay()
     {
@@ -141,4 +150,18 @@ public class TouchManager : MonoBehaviour
             return 0;
         }
     }
+    private void StartCoroutine(Func<IEnumerator> waitOneSecond)
+    {
+        throw new NotImplementedException();
+    }
+
+    IEnumerator waitOneSecond(GameObject winScreen)
+    {
+        yield return new WaitForSeconds(1f);
+        winScreen.GetComponent<MeshRenderer>().enabled = false;
+    }   
+    
+
+    
+    
 }
