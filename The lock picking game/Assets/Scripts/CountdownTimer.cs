@@ -7,23 +7,44 @@ public class CountdownTimer : MonoBehaviour
 {
     float currentTime = 0f;
     float startingTime = 20f;
+    bool haveShowLoseScreen = false;
 
     [SerializeField] Text countdownText;
+    [SerializeField] GameObject loseScreen;
 
     // Start is called before the first frame update
     void Start()
     {
         currentTime = startingTime;
+        loseScreen.GetComponent<MeshRenderer>().enabled = false;
     }
 
     void Update()
     {
         currentTime -= 1 * Time.deltaTime;
         countdownText.text = currentTime.ToString("0");
-        if(currentTime <= 0)
+        
+
+        if(currentTime <= 0 && !haveShowLoseScreen)
         {
-            currentTime = 0;
+            loseScreen.GetComponent<MeshRenderer>().enabled = true;
+            StartCoroutine(waitOneSecond(loseScreen));
+            haveShowLoseScreen = true;
         }
+
+        
+    }
+
+
+    private void StartCoroutine(System.Func<IEnumerator> waitOneSecond)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    IEnumerator waitOneSecond(GameObject linScreen)
+    {
+        yield return new WaitForSeconds(1f);
+        linScreen.GetComponent<MeshRenderer>().enabled = false;
     }
 
 }
