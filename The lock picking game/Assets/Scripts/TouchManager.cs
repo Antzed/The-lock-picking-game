@@ -133,15 +133,15 @@ public class TouchManager : MonoBehaviour
     private int getScreenShakeNumber(float distanceToWantedAngle)
     {
         //Determine the screenshake number number
-        if (distanceToWantedAngle > 1.3)
+        if (distanceToWantedAngle > 0.8)
         {
             return 3;
         }
-        else if (distanceToWantedAngle < 1.3 && distanceToWantedAngle > 0.80)
+        else if (distanceToWantedAngle < 0.8 && distanceToWantedAngle > 0.30)
         {
             return 2;
         }
-        else if (distanceToWantedAngle < 0.8)
+        else if (distanceToWantedAngle < 0.3)
         {
             return 1;
         }
