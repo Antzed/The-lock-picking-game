@@ -6,11 +6,12 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour
 {
 
-    GameObject gObj = null;
+    GameObject gObj;
     Plane objPlane;
     Vector3 mouseObject;
 
-    public ScreenShake screenShake;
+    ScreenShake screenShake;
+    
     private void Start()
     {
         screenShake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
@@ -20,11 +21,11 @@ public class TouchManager : MonoBehaviour
 
 
 
-    
+    public bool isShake;
     void Update()
     {
         //log the hit point coordinates in console
-        
+        isShake = false;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -63,6 +64,7 @@ public class TouchManager : MonoBehaviour
             float distanceToWantedAngle = calculateDistanceToWantedAngle(hit);
             int screenShakeNumber = getScreenShakeNumber(distanceToWantedAngle);
 
+            
             gObj = null;
             if (isHit && hit.collider.gameObject.name == "WantedAngle")
             {
@@ -83,6 +85,7 @@ public class TouchManager : MonoBehaviour
                 if (!screenShakeNumber.Equals(0))
                 {
                     screenShake.CamShake(screenShakeNumber);
+                    isShake = true;
                     Debug.LogError("Not unlock");
                 }
                 else
@@ -91,7 +94,6 @@ public class TouchManager : MonoBehaviour
                 }
             }
 
-           
         }
         
     }
@@ -132,7 +134,7 @@ public class TouchManager : MonoBehaviour
 
     }
 
-    private int getScreenShakeNumber(float distanceToWantedAngle)
+    public int getScreenShakeNumber(float distanceToWantedAngle)
     {
         //Determine the screenshake number number
         if (distanceToWantedAngle > 0.8)
@@ -162,6 +164,7 @@ public class TouchManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         winScreen.GetComponent<MeshRenderer>().enabled = false;
     }   
+
     
 
     
