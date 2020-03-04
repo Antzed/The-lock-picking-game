@@ -70,7 +70,9 @@ public class TouchManager : MonoBehaviour
                 GameObject winScreen = GameObject.FindGameObjectWithTag("WinScreen");
                 winScreen.GetComponent<MeshRenderer>().enabled = true;
                 StartCoroutine(waitOneSecond(winScreen));
-                
+
+                GameObject timerUI = GameObject.Find("CountdownText");
+                Destroy(timerUI);
 
             }
             else

@@ -30,6 +30,8 @@ public class CountdownTimer : MonoBehaviour
             loseScreen.GetComponent<MeshRenderer>().enabled = true;
             StartCoroutine(waitOneSecond(loseScreen));
             haveShowLoseScreen = true;
+            GameObject timerUI = GameObject.Find("CountdownText");
+            Destroy(timerUI);
         }
 
         
